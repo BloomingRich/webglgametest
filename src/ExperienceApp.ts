@@ -15,11 +15,11 @@ export class ExperienceApp {
   private readonly interactionController: InteractionController;
   private readonly refinement: HybridRefinement;
   private readonly earthScene = new EarthScene();
-  private readonly clock = new THREE.Clock();
+  private readonly clock = new (THREE as any).Clock();
 
-  private readonly scene = new THREE.Scene();
-  private readonly camera = new THREE.PerspectiveCamera(42, 1, 0.01, 300);
-  private readonly controls: OrbitControls;
+  private readonly scene = new (THREE as any).Scene();
+  private readonly camera = new (THREE as any).PerspectiveCamera(42, 1, 0.01, 300);
+  private readonly controls: any;
 
   constructor(private readonly host: HTMLElement, presetName: QualityPresetName = 'desktop-high') {
     this.rendererCore = new RendererCore(host);
@@ -47,7 +47,7 @@ export class ExperienceApp {
     this.interactionController = new InteractionController(interactionStart, interactionEnd);
     this.interactionController.attach(window);
 
-    this.scene.background = new THREE.Color('#000000');
+    this.scene.background = new (THREE as any).Color('#000000');
 
     this.mountHud();
     this.loadScene().catch(console.error);
@@ -95,19 +95,9 @@ export class ExperienceApp {
     this.host.appendChild(hud);
   }
 
-  private updateHud(
-    quality: {
-      interaction: boolean;
-      renderScale: number;
-      accumulationSamples: number;
-      rayBudget: number;
-    },
-    frameMs: number
-  ): void {
+  private updateHud(quality: { interaction: boolean; renderScale: number; accumulationSamples: number; rayBudget: number }, frameMs: number): void {
     const hud = document.getElementById('hud');
-    if (!hud) {
-      return;
-    }
+    if (!hud) return;
 
     hud.innerHTML = [
       `Backend: ${this.rendererCore.backend}`,

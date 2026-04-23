@@ -1,12 +1,13 @@
 import * as THREE from 'three';
-import { WebGLRenderer } from 'three';
 import { WebGPURenderer } from 'three/webgpu';
 import type { QualityState } from '../quality/QualityScaler';
+
+const WebGLRenderer = (THREE as any).WebGLRenderer;
 
 export type RendererBackend = 'webgpu' | 'webgl2';
 
 export class RendererCore {
-  readonly renderer: THREE.Renderer;
+  readonly renderer: any;
   readonly backend: RendererBackend;
 
   constructor(private readonly container: HTMLElement) {
@@ -20,14 +21,14 @@ export class RendererCore {
       this.backend = 'webgl2';
     }
 
-    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.outputColorSpace = (THREE as any).SRGBColorSpace;
+    this.renderer.toneMapping = (THREE as any).ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.0;
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     if ('shadowMap' in this.renderer) {
       this.renderer.shadowMap.enabled = true;
-      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.renderer.shadowMap.type = (THREE as any).PCFSoftShadowMap;
     }
 
     if ('useLegacyLights' in this.renderer) {
@@ -52,7 +53,7 @@ export class RendererCore {
     this.renderer.domElement.style.height = '100%';
   }
 
-  render(scene: THREE.Scene, camera: THREE.Camera): void {
+  render(scene: any, camera: any): void {
     this.renderer.render(scene, camera);
   }
 }
