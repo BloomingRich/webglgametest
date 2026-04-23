@@ -25,6 +25,15 @@ export class RendererCore {
     this.renderer.toneMappingExposure = 1.0;
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+    if ('shadowMap' in this.renderer) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
+
+    if ('useLegacyLights' in this.renderer) {
+      this.renderer.useLegacyLights = false;
+    }
+
     container.appendChild(this.renderer.domElement);
     this.resize();
   }
